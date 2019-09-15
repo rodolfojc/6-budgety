@@ -39,8 +39,27 @@ var controller = (function(budgetContr, UIContr){
     
 // MODULE
     
-    var DOM = UIContr.getDOMString();
+    var setupEventListener = function(){
+        
+        var DOM = UIContr.getDOMString();
+        
+        document.querySelector(DOM.inputButton).addEventListener('click', controlAddItem);
 
+        // GLOBAL DOCUMENT
+
+        document.addEventListener('keypress', function(event){
+
+            if(event.keyCode === 13 || event.which === 13) {
+                controlAddItem();
+
+            }
+        
+        });
+        
+    };
+    
+    
+    
     var controlAddItem = function(){
 
         // 1.- GET THE DATA
@@ -57,19 +76,16 @@ var controller = (function(budgetContr, UIContr){
     
     }    
 
-    document.querySelector(DOM.inputButton).addEventListener('click', controlAddItem);
-
-    // GLOBAL DOCUMENT
-
-    document.addEventListener('keypress', function(event){
-
-        if(event.keyCode === 13 || event.which === 13) {
-            controlAddItem();
-
+    // PUBLIC INICIATIZATION FUNCTION
+    
+    return {
+        init : function (){
+            console.log('APP has started!!')
+            setupEventListener();
         }
-    
-    
-});
+    };
     
     
 })(budgetController, UIController);
+
+controller.init();
