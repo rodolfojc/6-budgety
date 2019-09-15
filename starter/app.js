@@ -21,14 +21,52 @@ var budgetController = (function(){
     var data = {
         allItems: {
             exp: [],
-            inc: [],
+            inc: []
         },
         totals: {
             exp: 0,
             inc: 0
         }
         
-    }
+    };
+    
+    return {
+        addItem: function(type, des, val){
+            var newItem;
+            
+            // EXAMPLE
+            // [1 2 3 4 5 6], NEXT ID = 6
+            // [1 4 7 9 10], NEXT ID = 11
+            // COLISION BECAUSE THE NEXT ISN'T 5 = 10
+            
+            // CREATE NEW ID
+            if(data.allItems[type].length > 0){
+               ID = data.allItems[type][data.allItems[type].length-1].id + 1;
+            } else {
+               ID = 0;
+            }
+            
+            
+            // CREATE NEW ITEM BASED ON 'INC' OR 'EXP' 
+            if(type === 'exp'){
+                newItem = new Expense (ID, des, val);
+            } else if (type === 'inc'){
+                newItem = new Income (ID, des, val);
+            }
+            
+            // PUSH 
+            data.allItems[type].push(newItem);
+            
+            // RETURN OBJECT
+            return newItem;
+                        
+        },
+        
+        testing: function (){
+            console.log(data);
+        }
+        
+    };
         
 })();
 
@@ -87,12 +125,14 @@ var controller = (function(budgetContr, UIContr){
     
     
     var controlAddItem = function(){
-
+        
+        var input, newItem;
+                
         // 1.- GET THE DATA
-        var input = UIContr.getInput();
-        console.log(input);
-
+        input = UIContr.getInput();
+        
         // 2.- ADD THE ITEM TO THE BUDGET CONTROLLER
+        newItem = budgetContr.addItem(input.type, input.description, input.value);
 
         // 3.- ADD THE ITEM TO THE USER INTERFACE
 
