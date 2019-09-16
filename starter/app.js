@@ -89,7 +89,7 @@ var UIController = (function(){
           return {
               type: document.querySelector(DOMStrings.inputType).value, // INC OR EXP
               description: document.querySelector(DOMStrings.inputDescription).value,
-              value : document.querySelector(DOMStrings.inputValue).value
+              value: parseFloat(document.querySelector(DOMStrings.inputValue).value)
           };          
       },
         
@@ -165,7 +165,16 @@ var controller = (function(budgetContr, UIContr){
         
     };
     
-    
+    var updateBudget = function(){
+        
+        // 1.- CALCULATE THE BUGDGET
+        
+        // 2.- RETURN THE BUDGET
+        
+        // 3.- DISPLAY THE BUDGET ON THE UI
+        
+        
+    }
     
     var controlAddItem = function(){
         
@@ -174,18 +183,21 @@ var controller = (function(budgetContr, UIContr){
         // 1.- GET THE DATA
         input = UIContr.getInput();
         
-        // 2.- ADD THE ITEM TO THE BUDGET CONTROLLER
-        newItem = budgetContr.addItem(input.type, input.description, input.value);
+        if (input.description !== "" && !isNaN(input.value) && input.value > 0 ) {
+                    
+            // 2.- ADD THE ITEM TO THE BUDGET CONTROLLER
+            newItem = budgetContr.addItem(input.type, input.description, input.value);
 
-        // 3.- ADD THE ITEM TO THE USER INTERFACE
-        UIContr.addListItem(newItem, input.type);
+            // 3.- ADD THE ITEM TO THE USER INTERFACE
+            UIContr.addListItem(newItem, input.type);
 
-        // 4.- CLEAR FIELDS
-        UIContr.clearFields();
+            // 4.- CLEAR FIELDS
+            UIContr.clearFields();
+
+            // 5.- CALCULATE AND UPDATE THE BUDGET
+            updateBudget();
         
-        // 5.- CALCULATE THE BUDGET
-
-        // 6.- DISPLAY THE BUDGET
+        }
     
     }    
 
