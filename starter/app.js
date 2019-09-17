@@ -17,6 +17,19 @@ var budgetController = (function(){
         this.value = value;
     };
     
+    var calculateTotal = function(type){
+        
+        var sum = 0;
+        
+        data.allItems[type].forEach(function(current){
+            sum += current.value;
+        });
+        
+        data.totals[type] = sum;
+        
+    };
+    
+    
     // DATA STRUCTURE
     var data = {
         allItems: {
@@ -26,8 +39,10 @@ var budgetController = (function(){
         totals: {
             exp: 0,
             inc: 0
-        }
+        },
         
+        budget: 0,
+        porcentage: -1
     };
     
     return {
@@ -37,7 +52,7 @@ var budgetController = (function(){
             // EXAMPLE
             // [1 2 3 4 5 6], NEXT ID = 6
             // [1 4 7 9 10], NEXT ID = 11
-            // COLISION BECAUSE THE NEXT ISN'T 5 = 10
+            // COLISSION BECAUSE THE NEXT ISN'T 5 = 10
             
             // CREATE NEW ID
             if(data.allItems[type].length > 0){
@@ -60,6 +75,34 @@ var budgetController = (function(){
             // RETURN OBJECT
             return newItem;
                         
+        },
+        
+        calculateBudget: function(){
+            
+            // 1.- CALCULATE TOTAL INCOME AND EXPENSES
+            calculateTotal('inc');
+            calculateTotal('exp');
+            
+            // 2.- CALCULATE THE BUDGET INCOME - EXPENSES
+            data.budget = data.totals.inc - data.totals.exp;
+            
+            // 3.- CALCULATE THE PORCENTAGE OF INCOME / EXPENSES
+            if(data.totals.inc > 0) {
+                data.porcentage = Math.round((data.totals.exp / data.totals.inc)*100);
+            } else {
+                data.porcentage = -1;
+            }           
+            
+        },
+        
+        getBudget: function(){
+            return{
+              budget: data.budget,
+              totalInc: data.totals.inc,
+              totalExp: data.totals.exp,
+              porcentage: data.porcentage
+                
+            };
         },
         
         testing: function (){
@@ -111,8 +154,8 @@ var UIController = (function(){
           newHtml = newHtml.replace('%description%', obj.description);
           newHtml = newHtml.replace('%value%', obj.value);
           
-          console.log(newHtml);
-          console.log(element);
+          //console.log(newHtml);
+          //console.log(element);
           
           // 3.- INSERT THE HTML INTO THE DOM
           document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
@@ -167,12 +210,14 @@ var controller = (function(budgetContr, UIContr){
     
     var updateBudget = function(){
         
-        // 1.- CALCULATE THE BUGDGET
+        // 1.- CALCULATE THE BUDGET
+        budgetContr.calculateBudget();
         
         // 2.- RETURN THE BUDGET
+        var budget = budgetContr.getBudget();
         
         // 3.- DISPLAY THE BUDGET ON THE UI
-        
+        console.log(budget);
         
     }
     
