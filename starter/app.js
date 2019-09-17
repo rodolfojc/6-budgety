@@ -124,7 +124,11 @@ var UIController = (function(){
         inputValue: '.add__value',
         inputButton: '.add__btn',
         incomeContainer: '.income__list',
-        expensesContainer: '.expenses__list'
+        expensesContainer: '.expenses__list',
+        budgetLabel: '.budget__value',
+        incomeLabel: '.budget__income--value',
+        expensesLabel: '.budget__expenses--value',
+        porcentageLabel: '.budget__expenses--percentage'
     };
     
     return {
@@ -177,6 +181,22 @@ var UIController = (function(){
           fieldsArray[0].focus();
       },
         
+      displayBudget: function(obj){
+          
+        document.querySelector(DOMStrings.budgetLabel).textContent = obj.budget;
+        document.querySelector(DOMStrings.incomeLabel).textContent = obj.totalInc;
+        document.querySelector(DOMStrings.expensesLabel).textContent = obj.totalExp;
+        
+          
+        if (obj.porcentage > 0) {
+            document.querySelector(DOMStrings.porcentageLabel).textContent = obj.porcentage + '%';
+        } else {
+            document.querySelector(DOMStrings.porcentageLabel).textContent = '---';
+        }
+          
+          
+      },
+        
       getDOMString : function(){
           return DOMStrings;
       }
@@ -209,16 +229,17 @@ var controller = (function(budgetContr, UIContr){
     };
     
     var updateBudget = function(){
+        var budget;
         
         // 1.- CALCULATE THE BUDGET
         budgetContr.calculateBudget();
         
         // 2.- RETURN THE BUDGET
-        var budget = budgetContr.getBudget();
+        budget = budgetContr.getBudget();
         
         // 3.- DISPLAY THE BUDGET ON THE UI
-        console.log(budget);
-        
+        UIContr.displayBudget(budget);
+                
     }
     
     var controlAddItem = function(){
@@ -250,7 +271,14 @@ var controller = (function(budgetContr, UIContr){
     
     return {
         init : function (){
-            console.log('APP has started!!')
+            console.log('APP has started!!');
+            UIContr.displayBudget({
+              budget: 0,
+              totalInc: 0,
+              totalExp: 0,
+              porcentage: -1
+                
+            });
             setupEventListener();
         }
     };
