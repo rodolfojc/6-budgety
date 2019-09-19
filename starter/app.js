@@ -128,7 +128,8 @@ var UIController = (function(){
         budgetLabel: '.budget__value',
         incomeLabel: '.budget__income--value',
         expensesLabel: '.budget__expenses--value',
-        porcentageLabel: '.budget__expenses--percentage'
+        porcentageLabel: '.budget__expenses--percentage',
+        container: '.container',
     };
     
     return {
@@ -147,10 +148,10 @@ var UIController = (function(){
           
           if (type === 'inc'){
               element = DOMStrings.incomeContainer;
-              html = '<div class="item clearfix" id="income-%id%"> <div class="item__description">%description%</div> <div class="right clearfix"> <div class="item__value">%value%</div> <div class="item__delete"> <button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button> </div> </div> </div>';
+              html = '<div class="item clearfix" id="inc-%id%"> <div class="item__description">%description%</div> <div class="right clearfix"> <div class="item__value">%value%</div> <div class="item__delete"> <button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button> </div> </div> </div>';
           } else if (type === 'exp') {
              element = DOMStrings.expensesContainer;
-             html = '<div class="item clearfix" id="expense-%id%"> <div class="item__description">%description%</div> <div class="right clearfix"> <div class="item__value">%value%</div> <div class="item__percentage">21%</div> <div class="item__delete"> <button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button> </div> </div> </div>';        
+             html = '<div class="item clearfix" id="exp-%id%"> <div class="item__description">%description%</div> <div class="right clearfix"> <div class="item__value">%value%</div> <div class="item__percentage">21%</div> <div class="item__delete"> <button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button> </div> </div> </div>';        
           }
           
           // 2.- REPLACE THE PLACEHOLDER TEXT WITH SOME ACTUAL DATA
@@ -226,6 +227,8 @@ var controller = (function(budgetContr, UIContr){
         
         });
         
+        document.querySelector(DOM.container).addEventListener('click', controlDeleteItem)
+        
     };
     
     var updateBudget = function(){
@@ -265,7 +268,30 @@ var controller = (function(budgetContr, UIContr){
         
         }
     
-    }    
+    }
+    
+    var  controlDeleteItem = function(event){
+        
+        var itemId, splitId, type, ID;
+    
+        itemId = event.target.parentNode.parentNode.parentNode.parentNode.id;
+        
+        if(itemId) {
+            
+            //inc-1
+            splitId = itemId.split('-');
+            type = splitId[0];
+            ID = splitId[1];
+            
+            // 1.- DELETE ITEM FROM DATA
+            
+            // 2.- DELETE THE ITEM FROM THE UI
+            
+            // 3.- UPDATE AND SHOW THE NEW BUDGET
+            
+        }
+        
+    }
 
     // PUBLIC INICIATIZATION FUNCTION
     
