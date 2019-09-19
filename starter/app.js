@@ -77,6 +77,28 @@ var budgetController = (function(){
                         
         },
         
+        deleteItem: function (type,id){
+            
+            var ids, index;
+            // ID = 9
+            // IDS = [1 4 7 9 10], NEXT ID = 11
+            // INDEX = 3
+            
+            // MAP RETURNS A NEW ARRAY
+            ids = data.allItems[type].map(function(current){
+                return current.id;
+                                
+            });
+            
+            index = ids.indexOf(id);
+            
+            if (index !== -1){
+                // REMOVE THE ITEM IN INDEX, INDEX JUST 1 UNIT
+                data.allItems[type].splice(index, 1);
+            }
+            
+        },
+        
         calculateBudget: function(){
             
             // 1.- CALCULATE TOTAL INCOME AND EXPENSES
@@ -278,12 +300,13 @@ var controller = (function(budgetContr, UIContr){
         
         if(itemId) {
             
-            //inc-1
+            //inc-id or exp-id
             splitId = itemId.split('-');
             type = splitId[0];
-            ID = splitId[1];
-            
+            ID = parseInt(splitId[1]);
+                        
             // 1.- DELETE ITEM FROM DATA
+            budgetContr.deleteItem(type, ID);
             
             // 2.- DELETE THE ITEM FROM THE UI
             
